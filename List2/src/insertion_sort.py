@@ -1,17 +1,15 @@
 from typing import List
 
-
-def insertion_sort(array_length: int, array_to_sort: List[int]) -> List[int]:
+def insertion_sort(array_length: int, array_to_sort: List[int]) -> None:
     """
-    This function implements the insertion sort algorithm to sort an array in place.
-    Intuition: we go over the array, and for each element, we check if it is smaller than the previous elements.
+    Implements the insertion sort algorithm to sort an array in place.
 
     Parameters:
         array_length (int): The length of the array.
         array_to_sort (List[int]): The array to be sorted.
-
+    
     Returns:
-        List[int]: The sorted array.
+        None - the array is sorted in place.
     """
     for i in range(1, array_length):
         key = array_to_sort[i]
@@ -22,4 +20,8 @@ def insertion_sort(array_length: int, array_to_sort: List[int]) -> List[int]:
             j -= 1
         array_to_sort[j + 1] = key
 
-    return array_to_sort
+if __name__ == "__main__":
+    n = int(input().strip()) 
+    array = list(map(int, input().split()))  
+    insertion_sort(n, array) 
+    print(" ".join(map(str, array))) 
