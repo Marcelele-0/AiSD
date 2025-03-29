@@ -17,12 +17,20 @@ def hybrid_sort(lenght: int, array_to_sort: List[int], threshold: int = 10) -> N
         None - It sorts the array in place.
     """
     if lenght <= threshold:
-        insertion_sort(array_to_sort)
+        insertion_sort(lenght, array_to_sort)
     else:
         quick_sort(array_to_sort, 0, lenght - 1)  
 
 if __name__ == "__main__":
-    n = int(input().strip())  
-    array = list(map(int, input().split()))  
-    hybrid_sort(n, array)  
-    print(" ".join(map(str, array)))  
+    print("Enter the number of elements followed by the elements themselves:")
+    try:
+        n = int(input().strip())  
+        array = list(map(int, input().split()))  
+        hybrid_sort(n, array)  
+        print("Sorted array:", " ".join(map(str, array)))
+    except ValueError:
+        print("Invalid input. Please enter integers only.")
+    except IndexError:
+        print("The number of elements does not match the provided array length.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
