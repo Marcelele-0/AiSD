@@ -1,6 +1,7 @@
 from typing import List
 from quick_sort import quick_sort
 from insertion_sort import insertion_sort
+import sys
 
 def hybrid_sort(lenght: int, array_to_sort: List[int], threshold: int = 10) -> None:
     """
@@ -21,16 +22,12 @@ def hybrid_sort(lenght: int, array_to_sort: List[int], threshold: int = 10) -> N
     else:
         quick_sort(array_to_sort, 0, lenght - 1)  
 
+
 if __name__ == "__main__":
-    print("Enter the number of elements followed by the elements themselves:")
-    try:
-        n = int(input().strip())  
-        array = list(map(int, input().split()))  
-        hybrid_sort(n, array)  
-        print("Sorted array:", " ".join(map(str, array)))
-    except ValueError:
-        print("Invalid input. Please enter integers only.")
-    except IndexError:
-        print("The number of elements does not match the provided array length.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    input_data = sys.stdin.read().splitlines()
+    
+    n = int(input_data[0].strip())
+    array = list(map(int, input_data[1].split()))
+    
+    hybrid_sort(n, array)  
+    print(" ".join(map(str, array))) 

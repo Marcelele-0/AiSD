@@ -1,4 +1,5 @@
 from typing import List
+import sys
 
 def quick_sort(array_to_sort: List[int], low: int, high: int) -> None:
     """
@@ -47,15 +48,10 @@ def partition(array_to_sort: List[int], low: int, high: int) -> int:
     return i + 1
 
 if __name__ == "__main__":
-    print("Enter the number of elements followed by the elements themselves:")
-    try:
-        n = int(input().strip())  
-        array = list(map(int, input().split()))  
-        quick_sort(n, array)  
-        print("Sorted array:", " ".join(map(str, array)))
-    except ValueError:
-        print("Invalid input. Please enter integers only.")
-    except IndexError:
-        print("The number of elements does not match the provided array length.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    input_data = sys.stdin.read().splitlines()
+    
+    n = int(input_data[0].strip())
+    array = list(map(int, input_data[1].split()))
+    
+    quick_sort(array, 0, n - 1) 
+    print(" ".join(map(str, array)))  
