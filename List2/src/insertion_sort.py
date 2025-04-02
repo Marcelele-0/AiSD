@@ -1,9 +1,11 @@
 from typing import List
 import sys
+from utils.counters import reset_counters, comparison_count, swap_count, compare, swap
 
 def insertion_sort(array_length: int, array_to_sort: List[int]) -> None:
     """
     Implements the insertion sort algorithm to sort an array in place.
+    Tracks comparisons and swaps during sorting.
 
     Parameters:
         array_length (int): The length of the array.
@@ -16,8 +18,8 @@ def insertion_sort(array_length: int, array_to_sort: List[int]) -> None:
         key = array_to_sort[i]
         j = i - 1
 
-        while j >= 0 and key < array_to_sort[j]:
-            array_to_sort[j + 1] = array_to_sort[j]
+        while j >= 0 and not compare(array_to_sort[j], key):
+            swap(array_to_sort, j + 1, j)
             j -= 1
         array_to_sort[j + 1] = key
 
@@ -27,5 +29,14 @@ if __name__ == "__main__":
     n = int(input_data[0].strip())
     array = list(map(int, input_data[1].split()))
     
-    insertion_sort(n, array)  
-    print(" ".join(map(str, array))) 
+    if n < 40:
+        print("Initial array:", " ".join(f"{x:02}" for x in array))
+    
+    reset_counters()
+    insertion_sort(array, 0, n - 1) 
+    
+    if n < 40:
+        print("Sorted array:", " ".join(f"{x:02}" for x in array))
+    
+    print(f"Total comparisons: {comparison_count}")
+    print(f"Total swaps: {swap_count}")
