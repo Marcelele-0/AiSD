@@ -1,6 +1,6 @@
 from typing import List
 import sys
-import src.utils.counters as counters
+import utils.counters as counters
 
 
 def insertion_sort(array_length: int, array_to_sort: List[int]) -> None:

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Add the parent directory of `src` to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-import src.utils.counters as counters
+import utils.counters as counters
 from hybrid_sort import hybrid_sort
 
 def run_experiment(threshold_values, n_values, k=10):
