@@ -4,7 +4,7 @@ from quick_sort import quick_sort
 from insertion_sort import insertion_sort
 import src.utils.counters as counters
 
-def hybrid_sort(array_to_sort: List[int], threshold: int = 10) -> None:
+def hybrid_sort(array_to_sort: List[int], threshold: int = 7) -> None:
     """
     Implements a hybrid sorting algorithm that combines Quick Sort and Insertion Sort.
     If the sub-array size is below a certain threshold, Insertion Sort is used.
