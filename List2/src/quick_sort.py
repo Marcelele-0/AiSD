@@ -1,6 +1,6 @@
 from typing import List
 import sys
-from utils.counters import compare, swap, comparison_count, swap_count, reset_counters
+import utils.counters as counters
 
 def quick_sort(array_to_sort: List[int], low: int, high: int) -> None:
     """
@@ -42,11 +42,11 @@ def partition(array_to_sort: List[int], low: int, high: int) -> int:
     i = low - 1
 
     for j in range(low, high):
-        if compare(array_to_sort[j], pivot):
+        if counters.compare(array_to_sort[j], pivot):  # Use the compare function from counters
             i += 1
-            swap(array_to_sort, i, j)
+            counters.swap(array_to_sort, i, j)         # Use the swap function from counters
 
-    swap(array_to_sort, i + 1, high)
+    counters.swap(array_to_sort, i + 1, high)           # Use the swap function from counters
     return i + 1
 
 if __name__ == "__main__":
@@ -56,13 +56,13 @@ if __name__ == "__main__":
     array = list(map(int, input_data[1].split()))
     
     if n < 40:
-        print("Initial array:", " ".join(f"{x:02}" for x in array))
+        print("Initial array:", " ".join(str(x) for x in array))
     
-    reset_counters()
+    counters.reset_counters()  # Reset counters before sorting
     quick_sort(array, 0, n - 1) 
     
     if n < 40:
-        print("Sorted array:", " ".join(f"{x:02}" for x in array))
+        print("Sorted array:", " ".join(str(x) for x in array))
     
-    print(f"Total comparisons: {comparison_count}")
-    print(f"Total swaps: {swap_count}")
+    print(f"Total comparisons: {counters.comparison_count}")
+    print(f"Total swaps: {counters.swap_count}")
