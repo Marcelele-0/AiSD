@@ -2,7 +2,7 @@ from typing import List
 import sys
 from quick_sort import quick_sort
 from insertion_sort import insertion_sort
-import utils.counters as counters
+import src.utils.counters as counters
 
 def hybrid_sort(array_to_sort: List[int], threshold: int = 10) -> None:
     """

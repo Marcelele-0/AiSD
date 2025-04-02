@@ -1,6 +1,7 @@
 from typing import List
 import sys
-import utils.counters as counters
+import src.utils.counters as counters
+
 
 def quick_sort(array_to_sort: List[int], low: int, high: int) -> None:
     """
