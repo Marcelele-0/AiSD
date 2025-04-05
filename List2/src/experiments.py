@@ -7,7 +7,7 @@ from hybrid_sort import hybrid_sort
 import utils.counters as counters
 
 
-def run_experiment(sort_function, n: int, k: int, threshold: int =5) -> tuple:
+def run_experiment(sort_function, n: int, k: int, threshold: int = 5) -> tuple:
     """
     Run sorting experiment for a given sorting function and return the average number of comparisons and swaps.
     
@@ -31,7 +31,7 @@ def run_experiment(sort_function, n: int, k: int, threshold: int =5) -> tuple:
         if sort_function == hybrid_sort:
             sort_function(array, 0, n - 1, threshold)  # Hybrid sort with threshold
         else:
-            sort_function(array, 0, n - 1)  # Insertion sort or quick sort
+            sort_function(array, 0, n - 1)  # Insertion sort or quick sort or dual pivot quick sort
         
         # Collect comparisons and swaps
         comparisons_list.append(counters.comparison_count)
@@ -47,24 +47,26 @@ def run_experiment(sort_function, n: int, k: int, threshold: int =5) -> tuple:
 def experiment_for_big_sizes():
     sizes = [i for i in range(1000, 50001, 1000)]
     k_values = [10]
-    results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': []}
+    results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
     
     for k in k_values:
         for size in sizes:
             print(f"\nRunning experiment for n={size}, k={k}...")
             quick_comparisons, quick_swaps = run_experiment(quick_sort, size, k)
             hybrid_comparisons, hybrid_swaps = run_experiment(hybrid_sort, size, k, threshold=10)
+            dual_pivot_comparisons, dual_pivot_swaps = run_experiment(quick_sort, size, k)
             
             # Store the results in the dictionary
             results['quick_sort'].append((size, quick_comparisons, quick_swaps))
             results['hybrid_sort'].append((size, hybrid_comparisons, hybrid_swaps))
+            results['insertion_sort'].append((size, dual_pivot_comparisons, dual_pivot_swaps))
     
     return results
 
 def experiment_for_various_sizes():
     sizes = [10, 20, 30, 40, 50]
     k_values = [10]
-    results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': []}
+    results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
     
     for k in k_values:
         for size in sizes:
@@ -72,11 +74,13 @@ def experiment_for_various_sizes():
             insertion_comparisons, insertion_swaps = run_experiment(insertion_sort, size, k)
             quick_comparisons, quick_swaps = run_experiment(quick_sort, size, k)
             hybrid_comparisons, hybrid_swaps = run_experiment(hybrid_sort, size, k, threshold=10)
+            dual_pivot_comparisons, dual_pivot_swaps = run_experiment(quick_sort, size, k)
             
             # Store the results in the dictionary
             results['insertion_sort'].append((size, insertion_comparisons, insertion_swaps))
             results['quick_sort'].append((size, quick_comparisons, quick_swaps))
             results['hybrid_sort'].append((size, hybrid_comparisons, hybrid_swaps))
+            results['dual_pivot'].append((size, dual_pivot_comparisons, dual_pivot_swaps))
     
     return results
 
@@ -145,6 +149,6 @@ def analyze_results_big_sizes():
 
 if __name__ == "__main__":
     # Uncomment the function you want to run
-    analyze_results_big_sizes()
- #  analyze_results()
+    #analyze_results_big_sizes()
+    analyze_results()
 
