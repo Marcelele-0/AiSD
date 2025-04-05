@@ -36,8 +36,12 @@ def partition(array_to_sort: List[int], low: int, high: int) -> int:
     Returns:
         int: The index of the pivot after partitioning.
     """
-    pivot_index = random.randint(low, high)  # Randomly select a pivot index
-    array_to_sort[pivot_index], array_to_sort[high] = array_to_sort[high], array_to_sort[pivot_index]  # Swap pivot with last element
+   # Median of three: choose pivot as the median of low, high, and middle elements
+    mid = (low + high) // 2
+    pivot_index = sorted([low, mid, high], key=lambda x: array_to_sort[x])[1]
+    
+    # Swap pivot with the last element
+    array_to_sort[pivot_index], array_to_sort[high] = array_to_sort[high], array_to_sort[pivot_index]
     pivot = array_to_sort[high]
     
     i = low - 1
