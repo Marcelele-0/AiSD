@@ -12,7 +12,7 @@ def generate_random(n: int, seed: int = None) -> None:
     if seed is not None:
         random.seed(seed)  # Ensure reproducibility
 
-    array = [random.randint(1, 10**9) for _ in range(n)]  # Large range for variety
+    array = [random.randint(1, 100) for _ in range(n)]  # Large range for variety
     print(n)
     print(" ".join(map(str, array)))
 

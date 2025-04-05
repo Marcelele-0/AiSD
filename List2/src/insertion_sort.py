@@ -19,8 +19,8 @@ def insertion_sort(array_length: int, array_to_sort: List[int]) -> None:
         key = array_to_sort[i]
         j = i - 1
 
-        while j >= 0 and counters.compare(array_to_sort[j], key):  # Use compare from counters
-            counters.swap(array_to_sort, j + 1, j)  # Call swap from counters
+        while j >= 0 and not counters.compare(array_to_sort[j], key):   # Use the compare function from counters, returns True if array_to_sort[j] <= key so we need to negate it
+            counters.swap(array_to_sort, j + 1, j)                      # Use the swap function from counters
             j -= 1
         array_to_sort[j + 1] = key
 
