@@ -32,9 +32,9 @@ def dual_partition(array_to_sort: List[int], low: int, high: int) -> tuple:
         low (int): The starting index of the partition.
         high (int): The ending index of the partition.
     """
-    # Select two random pivots and swap them with the first and last elements
-    lower_pivot_index, high_pivot_index = sorted(random.sample(range(low, high + 1), 2))
-
+    # Choose two pivots 
+    lower_pivot_index, high_pivot_index = choose_two_pivots_without_sorting(array_to_sort, low, high)
+ 
     # Swap the pivots with the first and last elements
     counters.swap(array_to_sort, low, lower_pivot_index)
     counters.swap(array_to_sort, high, high_pivot_index)
@@ -72,6 +72,27 @@ def dual_partition(array_to_sort: List[int], low: int, high: int) -> tuple:
 
     # Return the indices of the pivots
     return left_pointer - 1, right_pointer + 1  
+
+def choose_two_pivots_without_sorting(array_to_sort: List[int], low: int, high: int):
+    # Select 5 elements (low, mid, high, and their neighbors)
+    mid = (low + high) // 2
+    candidates = [array_to_sort[low], array_to_sort[mid], array_to_sort[high], 
+                  array_to_sort[low+1] if low+1 <= high else None, 
+                  array_to_sort[high-1] if high-1 >= low else None]
+    
+    # Remove None if low+1 or high-1 is out of bounds
+    candidates = [x for x in candidates if x is not None]
+    
+    # Now select 2 elements, e.g., the median of the first 3
+    candidates_sorted = sorted(candidates)
+    pivot_low = candidates_sorted[1]  # Second smallest
+    pivot_high = candidates_sorted[3]  # Fourth smallest
+
+    # Find the original indices
+    pivot_low_index = array_to_sort.index(pivot_low)
+    pivot_high_index = array_to_sort.index(pivot_high)
+    
+    return pivot_low_index, pivot_high_index
 
 
 if __name__ == "__main__":

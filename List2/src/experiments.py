@@ -65,7 +65,7 @@ def experiment_for_big_sizes():
 
 def experiment_for_various_sizes():
     sizes = [10, 20, 30, 40, 50]
-    k_values = [10]
+    k_values = [1000]
     results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
     
     for k in k_values:
