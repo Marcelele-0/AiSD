@@ -47,7 +47,7 @@ def run_experiment(sort_function, n: int, k: int, threshold: int = 5) -> tuple:
 def experiment_for_big_sizes():
     sizes = [i for i in range(1000, 50001, 1000)]
     k_values = [10]
-    results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
+    results = {'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
     
     for k in k_values:
         for size in sizes:
@@ -59,13 +59,13 @@ def experiment_for_big_sizes():
             # Store the results in the dictionary
             results['quick_sort'].append((size, quick_comparisons, quick_swaps))
             results['hybrid_sort'].append((size, hybrid_comparisons, hybrid_swaps))
-            results['insertion_sort'].append((size, dual_pivot_comparisons, dual_pivot_swaps))
+            results['dual_pivot'].append((size, dual_pivot_comparisons, dual_pivot_swaps))
     
     return results
 
 def experiment_for_various_sizes():
     sizes = [10, 20, 30, 40, 50]
-    k_values = [10]
+    k_values = [1000]
     results = {'insertion_sort': [], 'quick_sort': [], 'hybrid_sort': [], 'dual_pivot': []}
     
     for k in k_values:
@@ -121,6 +121,48 @@ def plot_results(results):
     plt.tight_layout()
     plt.show()
 
+def calculate_C():
+    """
+    Calculate the constant C for comparisons vs n * log2(n) using experimental results.
+    
+    Parameters:
+        results (dict): The dictionary containing the sorting experiment results.
+        
+    Returns:
+        None: Displays the plot and prints the calculated C.
+    """
+    sizes = []
+    comparisons = []
+    
+    results = experiment_for_big_sizes()
+
+    # Collect data for quick_sort as an example
+    for size, comp, _ in results['quick_sort']:
+        sizes.append(size)
+        comparisons.append(comp)
+
+    # Calculate n * log2(n)
+    n_log_n = [size * np.log2(size) for size in sizes]
+    
+    # Calculate the constant C (comparison / n * log2(n))
+    C_values = [comp / n_log for comp, n_log in zip(comparisons, n_log_n)]
+    
+    # Calculate the average C
+    C_average = np.mean(C_values)
+    
+    # Print the results
+    print(f"Calculated constant C: {C_average:.4f}")
+    
+    # Plot comparisons vs n * log2(n)
+    plt.figure(figsize=(8, 6))
+    plt.scatter(n_log_n, comparisons, label="Experimental Data", color='blue')
+    plt.plot(n_log_n, [C_average * n_log for n_log in n_log_n], label=f"Fitted Line (C = {C_average:.4f})", color='red')
+    plt.xlabel('n * log2(n)')
+    plt.ylabel('Comparisons')
+    plt.title('Comparisons vs n * log2(n)')
+    plt.legend()
+    plt.show()
+
 def analyze_results():
     # Run the experiment and plot the results
     results = experiment_for_various_sizes()
@@ -150,5 +192,5 @@ def analyze_results_big_sizes():
 if __name__ == "__main__":
     # Uncomment the function you want to run
     #analyze_results_big_sizes()
-    analyze_results()
-
+    #analyze_results()
+    calculate_C()
