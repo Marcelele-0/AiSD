@@ -5,14 +5,6 @@ from quick_sort import quick_sort
 def merge(arr, left, right):
     """
     Merge two sorted sub-arrays of arr[] into a single sorted sub-array.
-    
-    Parameters:
-        arr (list): The list to be sorted.
-        left (int): Starting index of the left sub-array.
-        right (int): Ending index of the right sub-array.
-    
-    Returns:
-        None: The list is sorted in place.
     """
     mid = (left + right) // 2
     left_half = arr[left:mid + 1]
@@ -20,54 +12,49 @@ def merge(arr, left, right):
     
     i = j = 0
     k = left
-
-    # Merge the two halves
     while i < len(left_half) and j < len(right_half):
-        counters.comparison_count += 1  # Count comparison
-        if left_half[i] < right_half[j]:
-            arr[k] = left_half[i]
-            i += 1
+        counters.comparison_count += 1
+        if left_half[i] <= right_half[j]:
+            arr[k] = left_half[i]; i += 1
         else:
-            arr[k] = right_half[j]
-            j += 1
+            arr[k] = right_half[j]; j += 1
         k += 1
-
-    # If there are remaining elements in left_half
     while i < len(left_half):
-        arr[k] = left_half[i]
-        i += 1
-        k += 1
-
-    # If there are remaining elements in right_half
+        arr[k] = left_half[i]; i += 1; k += 1
     while j < len(right_half):
-        arr[k] = right_half[j]
-        j += 1
-        k += 1
+        arr[k] = right_half[j]; j += 1; k += 1
+
+def find_runs(arr, left, right):
+    """
+    Find ascending runs in arr[left:right+1], return list of (start,end).
+    """
+    runs = []
+    start = left
+    for i in range(left+1, right+1):
+        counters.comparison_count += 1
+        if arr[i] < arr[i-1]:
+            runs.append((start, i-1))
+            start = i
+    runs.append((start, right))
+    return runs
 
 def my_merge_sort(arr, left, right, threshold=15):
     """
-    Sort the array using Merge Sort algorithm for big arrays (recursive).
-    for small arrays, use quick sort.
-    
-    
-    Parameters:
-        arr (list): The list to be sorted.
-        left (int): Starting index of the array.
-        right (int): Ending index of the array.
-    
-    Returns:
-        None: The list is sorted in place.
+    Sort the array using natural runs and merge them (kept same signature).
     """
-    
-    if left < right:
-        if right - left <= threshold:
-            quick_sort(arr, left, right)  # Use quick sort for small arrays
-        else:
-            mid = (left + right) // 2
-            my_merge_sort(arr, left, mid)
-            my_merge_sort(arr, mid + 1, right)
-            merge(arr, left, right)  # Merge only after recursive sorts
-
+    # znajdź rosnące podciągi w arr[left:right]
+    runs = find_runs(arr, left, right)
+    # scalaj dopóki jest więcej niż jeden run
+    while len(runs) > 1:
+        new_runs = []
+        for i in range(0, len(runs)-1, 2):
+            l, _ = runs[i]
+            _, r = runs[i+1]
+            merge(arr, l, r)
+            new_runs.append((l, r))
+        if len(runs) % 2 == 1:
+            new_runs.append(runs[-1])
+        runs = new_runs
 
 if __name__ == "__main__":
     input_data = sys.stdin.read().splitlines()
@@ -77,16 +64,16 @@ if __name__ == "__main__":
     if n < 40:
         print("Initial array:", " ".join(f"{x:02}" for x in array))
 
-    counters.reset_counters()  # Reset counters before sorting
-    my_merge_sort(array, 0, n - 1)  # Sort the array in place, with correct low and high indices
+    original_array = array[:]          # zapamiętaj przed sortowaniem
+    counters.reset_counters()
+    my_merge_sort(array, 0, n-1)       # bez zmiany wywołania
 
     if n < 40:
         print("Sorted array:", " ".join(f"{x:02}" for x in array))
 
     print(f"Total comparisons: {counters.comparison_count}")
     print(f"Total swaps: {counters.swap_count}")
-    original_array = array[:]  # Make a copy of the original array
-    # Check if the result is a sorted version of the input
+
     if array == sorted(original_array):
         print("The array is correctly sorted.")
     else:

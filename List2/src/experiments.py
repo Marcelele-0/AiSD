@@ -57,9 +57,9 @@ def run_experiment_for_size(size: int, k: int) -> dict:
     """
     print(f"Running experiment for size {size} with {k} repetitions...")
     results = {}
-    results['quick_sort'] = run_experiment(quick_sort, size, k)
-    results['hybrid_sort'] = run_experiment(hybrid_sort, size, k, threshold=6)
-    results['dual_pivot'] = run_experiment(dual_pivot_quick_sort, size, k)
+    #results['quick_sort'] = run_experiment(quick_sort, size, k)
+    #results['hybrid_sort'] = run_experiment(hybrid_sort, size, k, threshold=6)
+    #results['dual_pivot'] = run_experiment(dual_pivot_quick_sort, size, k)
     results['merge_sort'] = run_experiment(merge_sort, size, k)
     results['my_merge_sort'] = run_experiment(my_merge_sort, size, k)
     return {size: results}
@@ -69,9 +69,9 @@ def experiment_for_big_sizes_parallel() -> dict:
     sizes = [i for i in range(1000, 50001, 1000)]
     k = 10 # Number of repetitions for each size
     combined_results = {
-        'quick_sort': [],
-        'hybrid_sort': [],
-        'dual_pivot': [],
+    #    'quick_sort': [],
+    #    'hybrid_sort': [],
+    #    'dual_pivot': [],
         'merge_sort': [],
         'my_merge_sort': []
     }
@@ -95,20 +95,20 @@ def experiment_for_various_sizes():
     sizes = [10, 20, 30, 40, 50]
     k = 1000
     results = {
-        'insertion_sort': [],
-        'quick_sort': [],
-        'hybrid_sort': [],
-        'dual_pivot': [],
+    #    'insertion_sort': [],
+    #    'quick_sort': [],
+    #    'hybrid_sort': [],
+    #    'dual_pivot': [],
         'merge_sort': [],
         'my_merge_sort': []
     }
     
     for size in sizes:
         print(f"\nRunning experiment for n={size}, k={k}...")
-        results['insertion_sort'].append((size, *run_experiment(insertion_sort, size, k)))
-        results['quick_sort'].append((size, *run_experiment(quick_sort, size, k)))
-        results['hybrid_sort'].append((size, *run_experiment(hybrid_sort, size, k, threshold=10)))
-        results['dual_pivot'].append((size, *run_experiment(dual_pivot_quick_sort, size, k)))
+    #    results['insertion_sort'].append((size, *run_experiment(insertion_sort, size, k)))
+    #    results['quick_sort'].append((size, *run_experiment(quick_sort, size, k)))
+    #    results['hybrid_sort'].append((size, *run_experiment(hybrid_sort, size, k, threshold=10)))
+    #    results['dual_pivot'].append((size, *run_experiment(dual_pivot_quick_sort, size, k)))
         results['merge_sort'].append((size, *run_experiment(merge_sort, size, k)))
         results['my_merge_sort'].append((size, *run_experiment(my_merge_sort, size, k)))
     
@@ -119,10 +119,10 @@ def plot_results(results):
     fig, ax = plt.subplots(2, 2, figsize=(14, 10))
     
     colors = {
-        'insertion_sort': '#e6194b',  # red
-        'quick_sort': '#3cb44b',      # green
-        'hybrid_sort': '#ffe119',     # yellow
-        'dual_pivot': '#4363d8',      # blue
+    #    'insertion_sort': '#e6194b',  # red
+    #    'quick_sort': '#3cb44b',      # green
+    #    'hybrid_sort': '#ffe119',     # yellow
+    #    'dual_pivot': '#4363d8',      # blue
         'merge_sort': '#f58231',      # orange
         'my_merge_sort': '#911eb4',   # purple
     }
@@ -213,6 +213,6 @@ def analyze_results_big_sizes():
 
 if __name__ == "__main__":
     # Uncomment the function(s) you want to run:
-    #analyze_results()
-    #results_big = analyze_results_big_sizes()
-    calculate_C()
+    analyze_results()
+    results_big = analyze_results_big_sizes()
+    #calculate_C()
