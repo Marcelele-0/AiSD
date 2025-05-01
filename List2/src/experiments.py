@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from insertion_sort import insertion_sort
 from quick_sort import quick_sort
 from dual_pivot_qs import dual_pivot_quick_sort
-from my_sort import my_merge_sort
+from List3.src.my_sort import my_merge_sort
 from merge_sort import merge_sort
 from hybrid_sort import hybrid_sort
 import utils.counters as counters
