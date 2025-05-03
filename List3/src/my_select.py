@@ -31,7 +31,7 @@ def partition_around_pivot(arr, low, high, pivot_value):
     return partition(arr, low, high)
 
 
-def select(arr, low, high, k):
+def my_select(arr, low, high, k):
     n = high - low + 1
     if n <= 5:
         insertion_sort(arr, low, high)
@@ -44,16 +44,16 @@ def select(arr, low, high, k):
         median = arr[i + (group_end - i) // 2]
         medians.append(median)
 
-    median_of_medians = select(medians, 0, len(medians) - 1, len(medians) // 2 + 1)
+    median_of_medians = my_select(medians, 0, len(medians) - 1, len(medians) // 2 + 1)
     pivot_index = partition_around_pivot(arr, low, high, median_of_medians)
 
     left_size = pivot_index - low + 1
     if k == left_size:
         return arr[pivot_index]
     elif k < left_size:
-        return select(arr, low, pivot_index - 1, k)
+        return my_select(arr, low, pivot_index - 1, k)
     else:
-        return select(arr, pivot_index + 1, high, k - left_size)
+        return my_select(arr, pivot_index + 1, high, k - left_size)
 
 
 if __name__ == "__main__":
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     counters.reset_counters()
     arr_copy = array.copy()
-    result_select = select(arr_copy, 0, n - 1, k)
+    result_select = my_select(arr_copy, 0, n - 1, k)
     print("\n--- DETERMINISTIC SELECT ---")
     if n < 30:
         print("Array after:", arr_copy)
