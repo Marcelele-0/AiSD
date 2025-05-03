@@ -31,15 +31,15 @@ def partition_around_pivot(arr, low, high, pivot_value):
     return partition(arr, low, high)
 
 
-def my_select(arr, low, high, k):
+def my_select(arr, low, high, k, group_size=5):
     n = high - low + 1
-    if n <= 5:
+    if n <= group_size:
         insertion_sort(arr, low, high)
         return arr[low + k - 1]
 
     medians = []
-    for i in range(low, high + 1, 5):
-        group_end = min(i + 4, high)
+    for i in range(low, high + 1, group_size):
+        group_end = min(i + group_size - 1, high)
         insertion_sort(arr, i, group_end)
         median = arr[i + (group_end - i) // 2]
         medians.append(median)
@@ -62,15 +62,19 @@ if __name__ == "__main__":
     k = int(input_data[1].strip())
     array = list(map(int, input_data[2].split()))
 
+    # Jeżeli n < 30, wyświetlamy początkową tablicę
     if n < 30:
         print("Initial array:", array)
 
     counters.reset_counters()
     arr_copy = array.copy()
     result_select = my_select(arr_copy, 0, n - 1, k)
+
     print("\n--- DETERMINISTIC SELECT ---")
+    
     if n < 30:
         print("Array after:", arr_copy)
+    
     print(f"{k}-th statistic: {result_select}")
     print("Sorted array:", sorted(array))
     print(f"Comparisons: {counters.comparison_count}, Swaps: {counters.swap_count}")
