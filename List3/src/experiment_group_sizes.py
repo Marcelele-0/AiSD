@@ -21,31 +21,34 @@ def plot_results(file_path):
                         value_vars=["avg_comparisons", "avg_swaps", "avg_time_sec"], 
                         var_name="metric", value_name="value")
 
-    # Dodaj kolumny algorytm i rodzaj metryki
-    df_melted["type"] = df_melted["metric"].apply(lambda x: "Comparisons" if "comparisons" in x else 
+    # Dodaj kolumnę typu metryki
+    df_melted["type"] = df_melted["metric"].apply(lambda x: "Comparisons" if "comparisons" in x else
                                                   ("Swaps" if "swaps" in x else "Time"))
 
-    # Wykresy: jeden wykres dla porównań, swapów i czasu
+    # Wykresy: Comparisons, Swaps, Time
     metrics = ["Comparisons", "Swaps", "Time"]
 
     for metric in metrics:
         subset = df_melted[df_melted["type"] == metric]
-        plt.figure(figsize=(10, 6))
 
-        # Generowanie wykresów dla różnych rozmiarów grup
-        for group in sorted(subset["group_size"].unique()):
-            group_subset = subset[subset["group_size"] == group]
-            sns.lineplot(data=group_subset, x="n", y="value", label=f'group size = {group}', errorbar=None)
+        # Osobny wykres dla każdej wartości k
+        for k_val in sorted(subset["k"].unique()):
+            k_subset = subset[subset["k"] == k_val]
+            plt.figure(figsize=(10, 6))
 
-        plt.title(f'{metric} for Different Group Sizes')
-        plt.xlabel("n (Input Size)")
-        plt.ylabel(f'Average {metric}')
-        plt.legend(title="Group Size")
-        plt.tight_layout()
-        plt.savefig(f"results/img/{metric.lower()}_group_size.png")
-        plt.close()
+            for group in sorted(k_subset["group_size"].unique()):
+                group_subset = k_subset[k_subset["group_size"] == group]
+                sns.lineplot(data=group_subset, x="n", y="value", label=f'group size = {group}', errorbar=None)
 
-    print("Wykresy zapisane w folderze 'results'.")
+            plt.title(f'{metric} for Different Group Sizes (k={k_val})')
+            plt.xlabel("n (Input Size)")
+            plt.ylabel(f'Average {metric}')
+            plt.legend(title="Group Size")
+            plt.tight_layout()
+            plt.savefig(f"results/ex3/{metric.lower()}_group_size_k{k_val}.png")
+            plt.close()
+
+    print("Wykresy zapisane w folderze 'results/ex3'")
 
 
 # Parametry eksperymentu
@@ -57,7 +60,7 @@ m = 30  # liczba powtórzeń
 # Plik wynikowy
 output_file = "results/select_group_size_experiment.csv"
 os.makedirs("results", exist_ok=True)
-os.makedirs("results/img", exist_ok=True)
+os.makedirs("results/ex3", exist_ok=True)
 
 # Nagłówek
 header = ["n", "group_size", "k", "avg_comparisons", "avg_swaps", "avg_time_sec"]

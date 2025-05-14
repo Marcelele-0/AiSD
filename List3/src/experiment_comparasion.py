@@ -90,7 +90,7 @@ def plot_results(file_path):
     k_values = df["k"].unique()
 
     # Tworzenie wykresów
-    os.makedirs("results/plots", exist_ok=True)
+    os.makedirs("results/ex2", exist_ok=True)
 
     for k_val in k_values:
         subset = df_melted[df_melted["k"] == k_val]
@@ -103,10 +103,10 @@ def plot_results(file_path):
         g.set_axis_labels("n", "Average Count")
         g.set_titles(col_template="{col_name}")
         plt.tight_layout()
-        plt.savefig(f"results/plots/select_comparison_k{k_val}.png")
+        plt.savefig(f"results/ex2/select_comparison_k{k_val}.png")
         plt.close()
 
-    print("Plots saved to 'results/plots/' folder.")
+    print("Plots saved to 'results/ex2/' folder.")
 
 if __name__ == "__main__":
     run_experiments()
