@@ -32,15 +32,15 @@ def plot_results(file_path):
         subset = df_melted[df_melted["type"] == metric]
         plt.figure(figsize=(10, 6))
 
-        # Generowanie wykresów dla różnych k
-        for k_value in subset["k"].unique():
-            k_subset = subset[subset["k"] == k_value]
-            sns.lineplot(data=k_subset, x="n", y="value", label=f'k = {k_value}', errorbar=None)
+        # Generowanie wykresów dla różnych rozmiarów grup
+        for group in sorted(subset["group_size"].unique()):
+            group_subset = subset[subset["group_size"] == group]
+            sns.lineplot(data=group_subset, x="n", y="value", label=f'group size = {group}', errorbar=None)
 
-        plt.title(f'{metric} for Different k Values')
+        plt.title(f'{metric} for Different Group Sizes')
         plt.xlabel("n (Input Size)")
         plt.ylabel(f'Average {metric}')
-        plt.legend(title="k values")
+        plt.legend(title="Group Size")
         plt.tight_layout()
         plt.savefig(f"results/img/{metric.lower()}_group_size.png")
         plt.close()
@@ -105,5 +105,5 @@ def run_experiment():
 
 # Uruchom eksperyment lub generowanie wykresów na podstawie wyników
 if __name__ == "__main__":
-    run_experiment()
+    #run_experiment()
     plot_results(output_file)

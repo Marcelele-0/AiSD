@@ -26,9 +26,9 @@ def run_tests():
     for n in n_values:
         print(f"\nTesting for n = {n}:")
 
-        # Generujemy dane wejściowe
-        array = [random.randint(0, 1000) for _ in range(n)]
-        
+        # Generujemy dane wejściowe - worst case
+        array = [i for i in range(n)][::-1]  # Odwrócona kolejność dla najgorszego przypadku
+
         # Testujemy oryginalny quick sort
         print("\n--- Original QuickSort ---")
         original_array = array[:]
