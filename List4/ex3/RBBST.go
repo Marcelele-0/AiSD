@@ -1,12 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"strings"
-	"time"
-)
-
 // Color typ reprezentujący kolor węzła w drzewie Red-Black
 type Color bool
 
@@ -120,27 +113,35 @@ func (rb *RB_BST) insert(key int) {
 
 	var y *RBNode = rb.nil
 	x := rb.root
-
 	// Znajdź miejsce do wstawienia
 	for x != rb.nil {
 		rb.comparisons++
 		y = x
+		rb.comparisons++
 		if newNode.key < x.key {
+			rb.pointerUpdates++
 			x = x.left
 		} else {
+			rb.pointerUpdates++
 			x = x.right
 		}
 	}
-
 	newNode.parent = y
 	rb.pointerUpdates++
 
+	rb.comparisons++
 	if y == rb.nil {
+		rb.pointerUpdates++
 		rb.root = newNode
-	} else if newNode.key < y.key {
-		y.left = newNode
 	} else {
-		y.right = newNode
+		rb.comparisons++
+		if newNode.key < y.key {
+			rb.pointerUpdates++
+			y.left = newNode
+		} else {
+			rb.pointerUpdates++
+			y.right = newNode
+		}
 	}
 
 	rb.pointerUpdates++
@@ -152,6 +153,9 @@ func (rb *RB_BST) insert(key int) {
 // insertFixup naprawia właściwości Red-Black po wstawieniu
 func (rb *RB_BST) insertFixup(z *RBNode) {
 	for rb.isRed(z.parent) {
+		if z.parent.parent == rb.nil {
+			break
+		}
 		if z.parent == z.parent.parent.left {
 			y := z.parent.parent.right
 			if rb.isRed(y) {
@@ -202,9 +206,13 @@ func (rb *RB_BST) search(key int) *RBNode {
 		rb.comparisons++
 		if key == current.key {
 			return current
-		} else if key < current.key {
+		}
+		rb.comparisons++
+		if key < current.key {
+			rb.pointerUpdates++
 			current = current.left
 		} else {
+			rb.pointerUpdates++
 			current = current.right
 		}
 	}
@@ -214,6 +222,8 @@ func (rb *RB_BST) search(key int) *RBNode {
 // minimum znajduje węzeł z minimalnym kluczem w poddrzewie
 func (rb *RB_BST) minimum(node *RBNode) *RBNode {
 	for node.left != rb.nil {
+		rb.comparisons++
+		rb.pointerUpdates++
 		node = node.left
 	}
 	return node
@@ -221,20 +231,28 @@ func (rb *RB_BST) minimum(node *RBNode) *RBNode {
 
 // transplant zastępuje poddrzewo zakorzenione w u poddrzewem zakorzenionym w v
 func (rb *RB_BST) transplant(u, v *RBNode) {
+	rb.comparisons++
 	if u.parent == rb.nil {
+		rb.pointerUpdates++
 		rb.root = v
-	} else if u == u.parent.left {
-		u.parent.left = v
 	} else {
-		u.parent.right = v
+		rb.comparisons++
+		if u == u.parent.left {
+			rb.pointerUpdates++
+			u.parent.left = v
+		} else {
+			rb.pointerUpdates++
+			u.parent.right = v
+		}
 	}
-	v.parent = u.parent
 	rb.pointerUpdates++
+	v.parent = u.parent
 }
 
 // deleteNode usuwa węzeł o podanym kluczu
 func (rb *RB_BST) deleteNode(key int) {
 	z := rb.search(key)
+	rb.comparisons++
 	if z == rb.nil {
 		return
 	}
@@ -243,31 +261,45 @@ func (rb *RB_BST) deleteNode(key int) {
 	yOriginalColor := y.color
 	var x *RBNode
 
+	rb.comparisons++
 	if z.left == rb.nil {
+		rb.pointerUpdates++
 		x = z.right
 		rb.transplant(z, z.right)
-	} else if z.right == rb.nil {
-		x = z.left
-		rb.transplant(z, z.left)
 	} else {
-		y = rb.minimum(z.right)
-		yOriginalColor = y.color
-		x = y.right
-
-		if y.parent == z {
-			x.parent = y
+		rb.comparisons++
+		if z.right == rb.nil {
+			rb.pointerUpdates++
+			x = z.left
+			rb.transplant(z, z.left)
 		} else {
-			rb.transplant(y, y.right)
-			y.right = z.right
-			y.right.parent = y
-		}
+			y = rb.minimum(z.right)
+			yOriginalColor = y.color
+			rb.pointerUpdates++
+			x = y.right
 
-		rb.transplant(z, y)
-		y.left = z.left
-		y.left.parent = y
-		y.color = z.color
+			rb.comparisons++
+			if y.parent == z {
+				rb.pointerUpdates++
+				if x != rb.nil {
+					x.parent = y
+				}
+			} else {
+				rb.transplant(y, y.right)
+				rb.pointerUpdates += 2
+				y.right = z.right
+				y.right.parent = y
+			}
+
+			rb.transplant(z, y)
+			rb.pointerUpdates += 3
+			y.left = z.left
+			y.left.parent = y
+			y.color = z.color
+		}
 	}
 
+	rb.comparisons++
 	if yOriginalColor == BLACK {
 		rb.deleteFixup(x)
 	}
@@ -275,14 +307,28 @@ func (rb *RB_BST) deleteNode(key int) {
 
 // deleteFixup naprawia właściwości Red-Black po usunięciu
 func (rb *RB_BST) deleteFixup(x *RBNode) {
+	// Sprawdź czy x nie jest nil lub sentinel
+	if x == rb.nil || x == nil {
+		return
+	}
 	for x != rb.root && !rb.isRed(x) {
+		if x.parent == rb.nil || x.parent == nil {
+			break
+		}
 		if x == x.parent.left {
 			w := x.parent.right
+			if w == nil || w == rb.nil {
+				break
+			}
+
 			if rb.isRed(w) {
 				rb.setColor(w, BLACK)
 				rb.setColor(x.parent, RED)
 				rb.leftRotate(x.parent)
 				w = x.parent.right
+				if w == nil || w == rb.nil {
+					break
+				}
 			}
 
 			if !rb.isRed(w.left) && !rb.isRed(w.right) {
@@ -294,6 +340,9 @@ func (rb *RB_BST) deleteFixup(x *RBNode) {
 					rb.setColor(w, RED)
 					rb.rightRotate(w)
 					w = x.parent.right
+					if w == nil || w == rb.nil {
+						break
+					}
 				}
 
 				w.color = x.parent.color
@@ -304,11 +353,18 @@ func (rb *RB_BST) deleteFixup(x *RBNode) {
 			}
 		} else {
 			w := x.parent.left
+			if w == nil || w == rb.nil {
+				break
+			}
+
 			if rb.isRed(w) {
 				rb.setColor(w, BLACK)
 				rb.setColor(x.parent, RED)
 				rb.rightRotate(x.parent)
 				w = x.parent.left
+				if w == nil || w == rb.nil {
+					break
+				}
 			}
 
 			if !rb.isRed(w.right) && !rb.isRed(w.left) {
@@ -320,6 +376,9 @@ func (rb *RB_BST) deleteFixup(x *RBNode) {
 					rb.setColor(w, RED)
 					rb.leftRotate(w)
 					w = x.parent.left
+					if w == nil || w == rb.nil {
+						break
+					}
 				}
 
 				w.color = x.parent.color
@@ -335,7 +394,12 @@ func (rb *RB_BST) deleteFixup(x *RBNode) {
 
 // calculateHeight oblicza wysokość drzewa
 func (rb *RB_BST) calculateHeight() int {
-	return rb.calculateHeightRecursive(rb.root)
+	if rb.root == rb.nil {
+		rb.height = 0
+		return 0
+	}
+	rb.height = rb.calculateHeightRecursive(rb.root)
+	return rb.height
 }
 
 func (rb *RB_BST) calculateHeightRecursive(node *RBNode) int {
@@ -365,192 +429,10 @@ func (rb *RB_BST) inorderRecursive(node *RBNode, result *[]int) {
 	}
 }
 
-// printTree wypisuje wizualizację drzewa z kolorowymi oznaczeniami
-func (rb *RB_BST) printTree(node *RBNode, prefix string, isLast bool, isRoot bool) {
-	if node == rb.nil || node == nil {
-		return
-	}
-
-	// Wybierz kolor terminala na podstawie koloru węzła
-	var colorCode, resetCode string
-	if node.color == RED {
-		colorCode = "\033[31m" // Czerwony tekst w terminalu
-	} else {
-		colorCode = "\033[90m" // Szary tekst w terminalu
-	}
-	resetCode = "\033[0m" // Reset koloru
-
-	// Wypisz obecny węzeł
-	var connector string
-	if isRoot {
-		connector = ""
-	} else if isLast {
-		connector = "└── "
-	} else {
-		connector = "├── "
-	}
-
-	fmt.Printf("%s%s%s[%d]%s\n", prefix, connector, colorCode, node.key, resetCode)
-
-	// Przygotuj prefix dla dzieci
-	var childPrefix string
-	if isRoot {
-		childPrefix = prefix
-	} else if isLast {
-		childPrefix = prefix + "    "
-	} else {
-		childPrefix = prefix + "│   "
-	}
-
-	// Sprawdź czy są dzieci
-	hasLeft := node.left != rb.nil
-	hasRight := node.right != rb.nil
-
-	// Wypisz dzieci
-	if hasLeft || hasRight {
-		if hasLeft {
-			rb.printTree(node.left, childPrefix, !hasRight, false)
-		}
-		if hasRight {
-			rb.printTree(node.right, childPrefix, true, false)
-		}
-	}
-}
-
-// printCompactView drukuje kompaktowy widok drzewa
-func (rb *RB_BST) printCompactView() {
-	values := rb.inorderTraversal()
-	if len(values) == 0 {
-		return
-	}
-
-	fmt.Printf("🔴⚫ Red-Black Tree (inorder): [")
-	for i, val := range values {
-		if i > 0 {
-			fmt.Print(", ")
-		}
-		fmt.Printf("%d", val)
-	}
-	fmt.Printf("]\n")
-}
-
-// printTreeDetailed drukuje szczegółowy widok drzewa z wszystkimi informacjami
-func (rb *RB_BST) printTreeDetailed() {
-	rb.height = rb.calculateHeight()
-
-	fmt.Printf("┌─ 🔴⚫ Red-Black Tree State ─┐\n")
-	fmt.Printf("│ Height: %-19d │\n", rb.height)
-	fmt.Printf("│ Comparisons: %-14d │\n", rb.comparisons)
-	fmt.Printf("│ Pointer Updates: %-10d │\n", rb.pointerUpdates)
-	fmt.Printf("│ Rotations: %-16d │\n", rb.rotations)
-	fmt.Printf("└─────────────────────────────┘\n")
-	if rb.root == rb.nil {
-		fmt.Println("🌿 Empty Red-Black Tree")
-	} else {
-		rb.printTree(rb.root, "", true, true)
-	}
-
-	rb.printCompactView()
-	fmt.Println()
-}
-
-// printOperation drukuje informacje o wykonywanej operacji
-func printRBOperation(operation string, key int, step int) {
-	var emoji string
-	switch operation {
-	case "INSERT":
-		emoji = "➕"
-	case "DELETE":
-		emoji = "➖"
-	case "SEARCH":
-		emoji = "🔍"
-	default:
-		emoji = "🔧"
-	}
-	fmt.Printf("%s %s %d (Step %d)\n", emoji, operation, key, step)
-	fmt.Println(strings.Repeat("─", 40))
-}
-
-// printSeparator drukuje separator z tytułem
-func printRBSeparator(title string) {
-	line := strings.Repeat("█", 60)
-	fmt.Printf("\n%s\n", line)
-	fmt.Printf("█%s█\n", strings.Repeat(" ", 58))
-	fmt.Printf("█  %-55s █\n", title)
-	fmt.Printf("█%s█\n", strings.Repeat(" ", 58))
-	fmt.Printf("%s\n\n", line)
-}
-
-// Przykładowe funkcje do testowania - można je przenieść do osobnego pliku main
-// lub użyć w testach jednostkowych
-
-// RunRBDemo uruchamia demonstrację Red-Black Tree
-func main() {
-	rb := NewRB_BST()
-	n := 30 // Reduced for better readability in demo
-
-	printRBSeparator("CASE 1: INCREASING SEQUENCE INSERT + RANDOM DELETE")
-
-	// Przypadek 1: Wstawianie rosnącego ciągu i usuwanie losowej permutacji
-	fmt.Println("📈 Inserting increasing sequence (1 to", n, ") into Red-Black Tree:")
-
-	for i := 1; i <= n; i++ {
-		printRBOperation("INSERT", i, i)
-		rb.insert(i)
-		rb.printTreeDetailed()
-	}
-
-	// Przygotowanie losowej permutacji do usuwania
-	keys := make([]int, n)
-	for i := 1; i <= n; i++ {
-		keys[i-1] = i
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(keys), func(i, j int) {
-		keys[i], keys[j] = keys[j], keys[i]
-	})
-
-	fmt.Println("\n🗑️  Deleting in random order:")
-	for idx, key := range keys {
-		printRBOperation("DELETE", key, idx+1)
-		rb.deleteNode(key)
-		rb.printTreeDetailed()
-	}
-
-	printRBSeparator("CASE 2: RANDOM INSERT + RANDOM DELETE")
-
-	// Przypadek 2: Wstawianie losowej permutacji i usuwanie losowej permutacji
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(keys), func(i, j int) {
-		keys[i], keys[j] = keys[j], keys[i]
-	})
-
-	rb = NewRB_BST() // Reset RB Tree
-	fmt.Println("🎲 Inserting random permutation into Red-Black Tree:")
-	for idx, key := range keys {
-		printRBOperation("INSERT", key, idx+1)
-		rb.insert(key)
-		rb.printTreeDetailed()
-	}
-
-	// Kolejna losowa permutacja do usywania
-	rand.Shuffle(len(keys), func(i, j int) {
-		keys[i], keys[j] = keys[j], keys[i]
-	})
-
-	fmt.Println("\n🗑️  Deleting in random order:")
-	for idx, key := range keys {
-		printRBOperation("DELETE", key, idx+1)
-		rb.deleteNode(key)
-		rb.printTreeDetailed()
-	}
-
-	printRBSeparator("FINAL STATISTICS")
-	fmt.Printf("🔴⚫ Red-Black Tree Final Statistics:\n")
-	fmt.Printf("Total comparisons: %d\n", rb.comparisons)
-	fmt.Printf("Total pointer updates: %d\n", rb.pointerUpdates)
-	fmt.Printf("Total rotations: %d\n", rb.rotations)
-	fmt.Printf("Final height: %d\n", rb.calculateHeight())
-	fmt.Println("\n🎉 Red-Black BST operations completed successfully!")
+// resetStats resetuje wszystkie statystyki
+func (rb *RB_BST) resetStats() {
+	rb.comparisons = 0
+	rb.pointerUpdates = 0
+	rb.rotations = 0
+	rb.height = 0
 }
