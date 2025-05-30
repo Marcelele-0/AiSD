@@ -126,23 +126,38 @@ func (bst *BST) minValueNode(node *Node) *Node {
 	return node
 }
 
-// heightOfTree zwraca wysokość drzewa
+// heightOfTree zwraca wysokość drzewa (wersja iteracyjna, BFS)
 func (bst *BST) heightOfTree() int {
-	bst.height = bst.calculateHeight(bst.root)
-	return bst.height
-}
-
-// calculateHeight rekurencyjnie oblicza wysokość drzewa
-func (bst *BST) calculateHeight(node *Node) int {
-	if node == nil {
+	if bst.root == nil {
+		bst.height = 0
 		return 0
 	}
-	leftHeight := bst.calculateHeight(node.left)
-	rightHeight := bst.calculateHeight(node.right)
-	if leftHeight > rightHeight {
-		return leftHeight + 1
+
+	type nodeLevel struct {
+		node  *Node
+		level int
 	}
-	return rightHeight + 1
+
+	queue := []nodeLevel{{bst.root, 1}}
+	maxHeight := 0
+
+	for len(queue) > 0 {
+		nl := queue[0]
+		queue = queue[1:]
+
+		if nl.level > maxHeight {
+			maxHeight = nl.level
+		}
+		if nl.node.left != nil {
+			queue = append(queue, nodeLevel{nl.node.left, nl.level + 1})
+		}
+		if nl.node.right != nil {
+			queue = append(queue, nodeLevel{nl.node.right, nl.level + 1})
+		}
+	}
+
+	bst.height = maxHeight
+	return maxHeight
 }
 
 // printTree wypisuje drzewo w ulepszonej formie tekstowej z lepszą czytelnością
