@@ -10,9 +10,8 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-
 	for {
-		fmt.Println("🌳 BST Demo Program")
+		fmt.Println("🌳 Splay Tree Demo Program")
 		fmt.Println("==================")
 		fmt.Println("Wybierz opcję:")
 		fmt.Println("1. Uruchom demo z małymi danymi (print)")
