@@ -62,3 +62,19 @@ run_all.bat
 - 🌲 BST - Binary Search Tree  
 - 🔴 RB-BST - Red-Black Tree
 - 🔄 Splay Tree
+
+## 📊 Generowanie wykresów porównawczych
+
+Po uruchomieniu benchmarków możesz wygenerować wykresy porównawcze:
+
+### Ręczne uruchomienie (jeśli masz Python)
+```bash
+python generate_charts.py
+```
+
+**Wymagania**: Python z bibliotekami `matplotlib` i `numpy`
+**Efekt**: Generuje wykresy PNG porównujące wydajność wszystkich trzech drzew:
+- 🔍 Porównania liczby porównań
+- 🔗 Porównania aktualizacji wskaźników  
+- 🌳 Porównania wysokości drzew
+- ⏱️ Porównania czasów wykonania

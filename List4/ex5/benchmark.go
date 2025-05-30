@@ -262,13 +262,13 @@ func runBenchmark() AllResults {
 	fmt.Println("==============================================")
 
 	// Konfiguracja
-	nValues := []int{10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000}
+	nValues := []int{10000, 20000}
 	testsPerN := 20
-	numWorkers := runtime.NumCPU()
+	numWorkers := 6
 
-	if numWorkers > 20 {
-		numWorkers = 20 // Ograniczenie dla stabilności
-	}
+	// if runtime.NumCPU() < numWorkers {
+	// 	numWorkers = runtime.NumCPU()
+	// }
 
 	fmt.Printf("🚀 Rozpoczynam wielowątkowe testy wydajności Splay Tree...\n")
 	fmt.Printf("⚙️ Liczba wątków roboczych: %d (z %d dostępnych rdzeni)\n", numWorkers, runtime.NumCPU())

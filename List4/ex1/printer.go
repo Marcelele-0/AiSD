@@ -92,9 +92,9 @@ func (bst *BST) printTreeDetailed() {
 
 // printOperation wypisuje informacje o operacji z ładnym formatowaniem
 func printOperation(operation string, key int, step int) {
-	fmt.Printf("\n" + strings.Repeat("═", 50) + "\n")
+	fmt.Printf("%s", "\n"+strings.Repeat("═", 50)+"\n")
 	fmt.Printf("Step %d: %s %d\n", step, operation, key)
-	fmt.Printf(strings.Repeat("═", 50) + "\n")
+	fmt.Printf("%s", strings.Repeat("═", 50)+"\n")
 }
 
 // printSeparator wypisuje separator między sekcjami

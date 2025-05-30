@@ -269,13 +269,13 @@ func runBenchmark() AllResults {
 	}
 
 	// Konfiguracja wielowątkowości - ustaw tutaj liczbę wątków
-	numWorkers := 20 // Można zmienić tę wartość (np. 4, 8, 16)
+	numWorkers := 6 // Można zmienić tę wartość (np. 4, 8, 16)
 	if numWorkers > runtime.NumCPU() {
 		numWorkers = runtime.NumCPU()
 	}
 
 	// Wartości n do testowania
-	nValues := []int{10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000}
+	nValues := []int{10000, 20000}
 	testsPerN := 20
 
 	fmt.Println("🚀 Rozpoczynam wielowątkowe testy wydajności RB-BST...")
