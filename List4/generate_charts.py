@@ -15,27 +15,30 @@ from pathlib import Path
 TREE_CONFIGS = {
     'BST': {
         'folder': 'ex1',
+        'json_file': 'bst_benchmark_results_short.json',
         'name': 'Binary Search Tree',
         'color': '#2E8B57',  # Zielony (SeaGreen)
         'marker': 'o'
     },
     'RB-BST': {
         'folder': 'ex3', 
+        'json_file': 'rbbst_benchmark_results_short.json',
         'name': 'Red-Black Tree',
         'color': '#DC143C',  # Czerwony (Crimson) 
         'marker': 's'
     },
     'Splay Tree': {
         'folder': 'ex5',
+        'json_file': 'splay_benchmark_short.json',
         'name': 'Splay Tree', 
         'color': '#4169E1',  # Niebieski (RoyalBlue)
         'marker': '^'
     }
 }
 
-def load_averaged_results(folder_path):
+def load_averaged_results(folder_path, json_filename):
     """Wczytuje skrócone wyniki z pliku JSON"""
-    json_file = folder_path / "averaged_results.json"
+    json_file = folder_path / json_filename
     if not json_file.exists():
         print(f"⚠️  Brak pliku {json_file}")
         return None
@@ -54,7 +57,7 @@ def prepare_data():
     
     for tree_type, config in TREE_CONFIGS.items():
         folder_path = Path(config['folder'])
-        results = load_averaged_results(folder_path)
+        results = load_averaged_results(folder_path, config['json_file'])
         
         if results:
             # Rozdziel na scenariusze
@@ -112,7 +115,7 @@ def create_comparison_chart(all_data, metric, title, ylabel, filename):
     plt.tight_layout()
     plt.savefig(f'charts_{filename}.png', dpi=300, bbox_inches='tight')
     plt.show()
-    print(f"📊 Wykres zapisany jako: charts_{filename}.png")
+    print("Wykres zapisany jako: charts_{}.png".format(filename))
 
 def create_height_comparison(all_data):
     """Specjalny wykres dla wysokości drzew (skala logarytmiczna)"""
@@ -161,7 +164,7 @@ def create_height_comparison(all_data):
         ax.grid(True, alpha=0.3)
         ax.set_yscale('log')
     
-    plt.suptitle('🌳 Porównanie wysokości drzew (skala logarytmiczna)', fontsize=16, fontweight='bold')
+    plt.suptitle('Porównanie wysokości drzew (skala logarytmiczna)', fontsize=16, fontweight='bold')
     plt.tight_layout()
     plt.savefig('charts_height_comparison.png', dpi=300, bbox_inches='tight')
     plt.show()
@@ -203,7 +206,7 @@ def create_time_comparison(all_data):
         ax.legend()
         ax.grid(True, alpha=0.3)
     
-    plt.suptitle('⏱️ Porównanie czasów wykonania', fontsize=16, fontweight='bold')
+    plt.suptitle('Porównanie czasów wykonania', fontsize=16, fontweight='bold')
     plt.tight_layout()
     plt.savefig('charts_time_comparison.png', dpi=300, bbox_inches='tight')
     plt.show()
@@ -236,34 +239,32 @@ def generate_summary_table(all_data):
 
 def main():
     """Główna funkcja programu"""
-    print("🌳 Generator wykresów porównawczych drzew")
+    print("Generator wykresów porównawczych drzew")
     print("="*50)
-    
-    # Sprawdź czy matplotlib jest dostępne
+      # Sprawdź czy matplotlib jest dostępne
     try:
         import matplotlib.pyplot as plt
         import numpy as np
     except ImportError:
-        print("❌ Błąd: Brak wymaganych bibliotek!")
-        print("💡 Zainstaluj: pip install matplotlib numpy")
+        print("BŁĄD: Brak wymaganych bibliotek!")
+        print("Zainstaluj: pip install matplotlib numpy")
         return
-    
-    # Wczytaj dane
+      # Wczytaj dane
     all_data = prepare_data()
     
     if not all_data:
-        print("❌ Brak danych do wygenerowania wykresów!")
-        print("💡 Uruchom najpierw benchmarki używając run_all.bat")
+        print("BŁĄD: Brak danych do wygenerowania wykresów!")
+        print("Uruchom najpierw benchmarki używając run_all.bat")
         return
     
     # Generuj wykresy
-    print("\n📊 Generowanie wykresów...")
+    print("\nGenerowanie wykresów...")
     
     # 1. Porównania liczby porównań
     create_comparison_chart(
         all_data, 
         'avg_insert_comparisons',
-        '🔍 Porównanie średniej liczby porównań (INSERT)',
+        'Porównanie średniej liczby porównań (INSERT)',
         'Średnia liczba porównań',
         'insert_comparisons'
     )
@@ -272,7 +273,7 @@ def main():
     create_comparison_chart(
         all_data,
         'avg_insert_pointers', 
-        '🔗 Porównanie średniej liczby aktualizacji wskaźników (INSERT)',
+        'Porównanie średniej liczby aktualizacji wskaźników (INSERT)',
         'Średnia liczba aktualizacji wskaźników',
         'insert_pointers'
     )

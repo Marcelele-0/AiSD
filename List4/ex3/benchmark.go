@@ -269,7 +269,7 @@ func runBenchmark() AllResults {
 	}
 
 	// Konfiguracja wielowątkowości - ustaw tutaj liczbę wątków
-	numWorkers := 6 // Można zmienić tę wartość (np. 4, 8, 16)
+	numWorkers := 4 // Można zmienić tę wartość (np. 4, 8, 16)
 	if numWorkers > runtime.NumCPU() {
 		numWorkers = runtime.NumCPU()
 	}

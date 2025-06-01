@@ -1,0 +1,224 @@
+{
+  "averaged_results": [
+    {
+      "n": 10000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 10000,
+      "avg_insert_pointers": 5000.5,
+      "avg_insert_height": 5000.5,
+      "avg_delete_comparisons": 5003.267519999999,
+      "avg_delete_pointers": 2502.1337599999997,
+      "avg_delete_height": 4999.5,
+      "avg_total_time_ms": 1509.3453599999998
+    },
+    {
+      "n": 10000,
+      "scenario": "random",
+      "avg_insert_comparisons": 31.796250000000008,
+      "avg_insert_pointers": 16.398125000000004,
+      "avg_insert_height": 26.89629,
+      "avg_delete_comparisons": 32.08872999999999,
+      "avg_delete_pointers": 17.277085,
+      "avg_delete_height": 26.838085,
+      "avg_total_time_ms": 607.182955
+    },
+    {
+      "n": 20000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 20000,
+      "avg_insert_pointers": 10000.5,
+      "avg_insert_height": 10000.5,
+      "avg_delete_comparisons": 9994.486785000003,
+      "avg_delete_pointers": 4997.743392500001,
+      "avg_delete_height": 9999.5,
+      "avg_total_time_ms": 6915.167984999998
+    },
+    {
+      "n": 20000,
+      "scenario": "random",
+      "avg_insert_comparisons": 34.53499,
+      "avg_insert_pointers": 17.767495,
+      "avg_insert_height": 29.51943,
+      "avg_delete_comparisons": 34.780277500000004,
+      "avg_delete_pointers": 18.6209475,
+      "avg_delete_height": 28.897084999999997,
+      "avg_total_time_ms": 3564.9625800000003
+    },
+    {
+      "n": 30000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 30000,
+      "avg_insert_pointers": 15000.5,
+      "avg_insert_height": 15000.5,
+      "avg_delete_comparisons": 14985.399046666667,
+      "avg_delete_pointers": 7493.199523333334,
+      "avg_delete_height": 14999.5,
+      "avg_total_time_ms": 15473.561105000004
+    },
+    {
+      "n": 30000,
+      "scenario": "random",
+      "avg_insert_comparisons": 36.284193333333334,
+      "avg_insert_pointers": 18.642096666666667,
+      "avg_insert_height": 31.60050833333334,
+      "avg_delete_comparisons": 36.552195,
+      "avg_delete_pointers": 19.510868333333335,
+      "avg_delete_height": 31.169826666666673,
+      "avg_total_time_ms": 8372.350315
+    },
+    {
+      "n": 40000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 40000,
+      "avg_insert_pointers": 20000.5,
+      "avg_insert_height": 20000.5,
+      "avg_delete_comparisons": 19980.583339999997,
+      "avg_delete_pointers": 9990.791669999999,
+      "avg_delete_height": 19999.5,
+      "avg_total_time_ms": 27674.803174999997
+    },
+    {
+      "n": 40000,
+      "scenario": "random",
+      "avg_insert_comparisons": 37.5355075,
+      "avg_insert_pointers": 19.26775375,
+      "avg_insert_height": 32.202257499999995,
+      "avg_delete_comparisons": 37.80156,
+      "avg_delete_pointers": 20.133550000000003,
+      "avg_delete_height": 32.08137875,
+      "avg_total_time_ms": 15743.527125000002
+    },
+    {
+      "n": 50000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 50000,
+      "avg_insert_pointers": 25000.5,
+      "avg_insert_height": 25000.5,
+      "avg_delete_comparisons": 25024.782718,
+      "avg_delete_pointers": 12512.891359,
+      "avg_delete_height": 24999.5,
+      "avg_total_time_ms": 43966.36373999999
+    },
+    {
+      "n": 50000,
+      "scenario": "random",
+      "avg_insert_comparisons": 38.774596,
+      "avg_insert_pointers": 19.887298,
+      "avg_insert_height": 33.738013,
+      "avg_delete_comparisons": 39.021124,
+      "avg_delete_pointers": 20.741903,
+      "avg_delete_height": 33.671854,
+      "avg_total_time_ms": 25949.40319
+    },
+    {
+      "n": 60000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 60000,
+      "avg_insert_pointers": 30000.5,
+      "avg_insert_height": 30000.5,
+      "avg_delete_comparisons": 30002.295653333327,
+      "avg_delete_pointers": 15001.647826666664,
+      "avg_delete_height": 29999.5,
+      "avg_total_time_ms": 65182.41895499999
+    },
+    {
+      "n": 60000,
+      "scenario": "random",
+      "avg_insert_comparisons": 39.905021666666656,
+      "avg_insert_pointers": 20.452510833333328,
+      "avg_insert_height": 35.302006666666664,
+      "avg_delete_comparisons": 40.15656666666667,
+      "avg_delete_pointers": 21.311424999999996,
+      "avg_delete_height": 34.953516666666665,
+      "avg_total_time_ms": 39682.475764999996
+    },
+    {
+      "n": 70000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 70000,
+      "avg_insert_pointers": 35000.5,
+      "avg_insert_height": 35000.5,
+      "avg_delete_comparisons": 35018.310531428564,
+      "avg_delete_pointers": 17509.655265714282,
+      "avg_delete_height": 34999.5,
+      "avg_total_time_ms": 91062.47683500002
+    },
+    {
+      "n": 70000,
+      "scenario": "random",
+      "avg_insert_comparisons": 40.20656857142857,
+      "avg_insert_pointers": 20.603284285714285,
+      "avg_insert_height": 35.531996428571425,
+      "avg_delete_comparisons": 40.46221285714286,
+      "avg_delete_pointers": 21.46248642857143,
+      "avg_delete_height": 35.44359714285714,
+      "avg_total_time_ms": 58204.172435
+    },
+    {
+      "n": 80000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 80000,
+      "avg_insert_pointers": 40000.5,
+      "avg_insert_height": 40000.5,
+      "avg_delete_comparisons": 39971.501231250004,
+      "avg_delete_pointers": 19986.250615625002,
+      "avg_delete_height": 39999.5,
+      "avg_total_time_ms": 117987.10961000001
+    },
+    {
+      "n": 80000,
+      "scenario": "random",
+      "avg_insert_comparisons": 40.06998625,
+      "avg_insert_pointers": 20.534993125,
+      "avg_insert_height": 34.9426325,
+      "avg_delete_comparisons": 40.32925875,
+      "avg_delete_pointers": 21.397404375,
+      "avg_delete_height": 34.79218,
+      "avg_total_time_ms": 75322.20018999999
+    },
+    {
+      "n": 90000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 90000,
+      "avg_insert_pointers": 45000.5,
+      "avg_insert_height": 45000.5,
+      "avg_delete_comparisons": 44991.00326111111,
+      "avg_delete_pointers": 22496.001630555555,
+      "avg_delete_height": 44999.5,
+      "avg_total_time_ms": 137485.60281500002
+    },
+    {
+      "n": 90000,
+      "scenario": "random",
+      "avg_insert_comparisons": 41.423481111111116,
+      "avg_insert_pointers": 21.211740555555558,
+      "avg_insert_height": 36.668111666666654,
+      "avg_delete_comparisons": 41.68283388888889,
+      "avg_delete_pointers": 22.074183333333334,
+      "avg_delete_height": 36.45873222222222,
+      "avg_total_time_ms": 90820.2547
+    },
+    {
+      "n": 100000,
+      "scenario": "ordered",
+      "avg_insert_comparisons": 100000,
+      "avg_insert_pointers": 50000.5,
+      "avg_insert_height": 50000.5,
+      "avg_delete_comparisons": 49981.494882,
+      "avg_delete_pointers": 24991.247441,
+      "avg_delete_height": 49999.5,
+      "avg_total_time_ms": 159360.680625
+    },
+    {
+      "n": 100000,
+      "scenario": "random",
+      "avg_insert_comparisons": 41.283782,
+      "avg_insert_pointers": 21.141891,
+      "avg_insert_height": 36.153910999999994,
+      "avg_delete_comparisons": 41.557339999999996,
+      "avg_delete_pointers": 22.012110999999997,
+      "avg_delete_height": 35.58457349999999,
+      "avg_total_time_ms": 106708.677715
+    }
+  ]
+}
