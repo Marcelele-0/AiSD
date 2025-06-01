@@ -41,3 +41,9 @@ if __name__ == "__main__":
     
     print(f"Total comparisons: {counters.comparison_count}")
     print(f"Total swaps: {counters.swap_count}")
+    original_array = array[:]  # Make a copy of the original array
+    # Check if the result is a sorted version of the input
+    if array == sorted(original_array):
+        print("The array is correctly sorted.")
+    else:
+        print("The array is NOT correctly sorted.")
