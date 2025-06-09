@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Wczytanie danych
-data = pd.read_csv('ex1/results.csv')
+data = pd.read_csv('results.csv')
 
 # Konfiguracja wykresu
 plt.figure(figsize=(12, 8))
