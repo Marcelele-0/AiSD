@@ -10,6 +10,8 @@
 
 #include "mst_lib.h"  // Include MST functionality
 #include <climits>
+#include <thread>
+#include <future>
 
 using Clock = chrono::high_resolution_clock;
 using ms = chrono::duration<double, milli>;
@@ -174,32 +176,79 @@ int main() {
     const int step = 100;           // Step size for graph size increment
     const int rep = 50;            // Number of repetitions per graph size
     
+    // Determine number of threads (use fewer cores for this analysis)
+    const unsigned int available_cores = thread::hardware_concurrency();
+    const unsigned int num_threads = max(1u, available_cores > 4 ? available_cores - 4 : 1);
+    cout << "Available cores: " << available_cores << ", using " << num_threads << " threads for parallel execution\n";
+    
+    // Prepare test cases
+    vector<int> test_sizes;
+    for (int n = nMin; n <= nMax; n += step) {
+        test_sizes.push_back(n);
+    }
+    
     cout << "Starting information spreading analysis on MST trees...\n";
-    cout << "Graph sizes: " << nMin << " to " << nMax << " (step=" << step << ", repetitions=" << rep << ")\n\n";
+    cout << "Graph sizes: " << nMin << " to " << nMax << " (step=" << step << ", repetitions=" << rep << ")\n";
+    cout << "Total test cases: " << test_sizes.size() << "\n\n";
     
     // Open output file for results
     ofstream out("info_spread_results.csv");
     out << "n,avg_rounds,min_rounds,max_rounds\n";
     
+    // Execute tests in parallel batches
+    vector<SpreadingStats> results;
+    results.reserve(test_sizes.size());
+    
     auto total_start = Clock::now();
     
-    for (int n = nMin; n <= nMax; n += step) {
-        cout << "Testing n = " << n << "... " << flush;
+    // Process tests in batches to avoid creating too many threads
+    for (size_t i = 0; i < test_sizes.size(); i += num_threads) {
+        vector<future<SpreadingStats>> futures;
         
-        auto start = Clock::now();
-        auto stats = analyze_spreading_for_size(n, rep, 42 + n);
-        auto end = Clock::now();
+        // Launch threads for current batch
+        for (size_t j = i; j < min(i + num_threads, test_sizes.size()); ++j) {
+            int n = test_sizes[j];
+            unsigned int seed = 42 + j;  // Different seed for each test
+            
+            futures.push_back(async(launch::async, analyze_spreading_for_size, n, rep, seed));
+        }
         
-        double test_time = ms(end - start).count();
+        // Collect results from current batch
+        for (auto& future : futures) {
+            results.push_back(future.get());
+        }
         
-        // Output results
-        out << n << "," << fixed << setprecision(2) << stats.avg_rounds << "," 
+        // Progress update with percentage and current test sizes
+        int current_batch = (i / num_threads + 1);
+        int total_batches = ((test_sizes.size() + num_threads - 1) / num_threads);
+        double progress_percent = (double)current_batch / total_batches * 100.0;
+        
+        cout << "Progress: " << fixed << setprecision(1) << progress_percent << "% "
+             << "(batch " << current_batch << "/" << total_batches << ") - ";
+        
+        // Show which graph sizes were tested in this batch
+        cout << "tested n = ";
+        for (size_t j = i; j < min(i + num_threads, test_sizes.size()); ++j) {
+            if (j > i) cout << ", ";
+            cout << test_sizes[j];
+        }
+        cout << "\n";
+    }
+    
+    // Sort results by graph size (in case they completed out of order)
+    sort(results.begin(), results.end(), [](const SpreadingStats& a, const SpreadingStats& b) {
+        return a.n < b.n;
+    });
+    
+    // Write results to file and display
+    for (const auto& stats : results) {
+        out << stats.n << "," << fixed << setprecision(2) << stats.avg_rounds << "," 
             << stats.min_rounds << "," << stats.max_rounds << "\n";
         
-        cout << "avg=" << fixed << setprecision(2) << stats.avg_rounds 
-             << ", min=" << stats.min_rounds 
-             << ", max=" << stats.max_rounds 
-             << " (took " << fixed << setprecision(1) << test_time << "ms)\n";
+        cout << "n=" << stats.n 
+             << " | avg=" << fixed << setprecision(2) << stats.avg_rounds 
+             << " | min=" << stats.min_rounds 
+             << " | max=" << stats.max_rounds << "\n";
     }
     
     auto total_end = Clock::now();

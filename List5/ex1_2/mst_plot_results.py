@@ -76,7 +76,7 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('ex1/mst_comparison.png', dpi=300, bbox_inches='tight')
+plt.savefig('mst_comparison.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Wyświetlenie statystyk
