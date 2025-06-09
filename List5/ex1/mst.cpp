@@ -247,7 +247,7 @@ int main() {
     }
     
     // Open output file for results
-    ofstream out("ex1/results.csv");
+    ofstream out("results.csv");
     out << "n,prim_time,kruskal_time\n";
     
     // Execute tests in parallel batches
