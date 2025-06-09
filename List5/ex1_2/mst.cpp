@@ -108,24 +108,35 @@ vector<vector<double>> generate_graph(int n, mt19937 &rng) {
 }
 
 /**
+ * @struct MSTResult
+ * @brief Structure to hold both cost and edges of MST
+ */
+struct MSTResult {
+    double cost;                ///< Total cost of the MST
+    vector<Edge> edges;         ///< Edges that form the MST
+};
+
+/**
  * @brief Prim's algorithm for finding Minimum Spanning Tree
  * @param G Const reference to adjacency matrix representing the graph
- * @return Total weight of the minimum spanning tree
+ * @return MSTResult containing cost and edges of the minimum spanning tree
  * @details Implements Prim's algorithm using a priority queue (min-heap).
  *          Starts from vertex 0 and greedily adds the minimum weight edge
  *          that connects a vertex in MST to a vertex outside MST.
  * @complexity Time: O(V² log V) with adjacency matrix, Space: O(V)
  * @note Uses structured bindings (C++17 feature)
  */
-double prim(const vector<vector<double>> &G) {
+MSTResult prim(const vector<vector<double>> &G) {
     int n = static_cast<int>(G.size());
     vector<bool> inMST(n, false);           // Track vertices included in MST
     vector<double> key(n, 1e9);             // Minimum weight to connect each vertex
+    vector<int> parent(n, -1);              // Track parent to reconstruct MST
     priority_queue<pair<double, int>, vector<pair<double, int>>, greater<>> pq;
     
     key[0] = 0;
     pq.emplace(0.0, 0);
     double cost = 0.0;
+    vector<Edge> mst_edges;
 
     while (!pq.empty()) {
         auto [w, u] = pq.top(); 
@@ -136,27 +147,33 @@ double prim(const vector<vector<double>> &G) {
         inMST[u] = true;
         cost += w;
         
+        // Add edge to MST (except for root)
+        if (parent[u] != -1) {
+            mst_edges.push_back({parent[u], u, G[parent[u]][u]});
+        }
+        
         // Update keys of adjacent vertices
         for (int v = 0; v < n; ++v) {
             if (!inMST[v] && G[u][v] < key[v]) {
                 key[v] = G[u][v];
+                parent[v] = u;
                 pq.emplace(key[v], v);
             }
         }
     }
-    return cost;
+    return {cost, mst_edges};
 }
 
 /**
  * @brief Kruskal's algorithm for finding Minimum Spanning Tree
  * @param G Const reference to adjacency matrix representing the graph
- * @return Total weight of the minimum spanning tree
+ * @return MSTResult containing cost and edges of the minimum spanning tree
  * @details Implements Kruskal's algorithm using edge sorting and Union-Find.
  *          Sorts all edges by weight and greedily adds edges that don't create cycles.
  * @complexity Time: O(E log E) where E = V(V-1)/2 for complete graph, Space: O(E + V)
  * @note More efficient for sparse graphs, but this implementation uses complete graphs
  */
-double kruskal(const vector<vector<double>> &G) {
+MSTResult kruskal(const vector<vector<double>> &G) {
     int n = static_cast<int>(G.size());
     vector<Edge> edges;
     
@@ -168,14 +185,16 @@ double kruskal(const vector<vector<double>> &G) {
     sort(edges.begin(), edges.end());  // Sort edges by weight
     DSU dsu(n);
     double cost = 0.0;
+    vector<Edge> mst_edges;
     
     // Process edges in order of increasing weight
     for (const auto &e : edges) {
         if (dsu.unite(e.u, e.v)) {  // If vertices are in different components
             cost += e.w;
+            mst_edges.push_back(e);
         }
     }
-    return cost;
+    return {cost, mst_edges};
 }
 
 /**
@@ -205,13 +224,13 @@ TestResult test_graph_size(int n, int rep, unsigned int seed) {
         
         // Time Prim's algorithm
         auto start = Clock::now();
-        prim(G);
+        prim(G).cost;  // Only need cost for timing
         auto end = Clock::now();
         prim_total += ms(end - start).count();
         
         // Time Kruskal's algorithm
         start = Clock::now();
-        kruskal(G);
+        kruskal(G).cost;  // Only need cost for timing
         end = Clock::now();
         kruskal_total += ms(end - start).count();
     }
